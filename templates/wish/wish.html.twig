@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div>
+        <h1>All wishes!</h1>
+        <div class="list-group">
+            {% for wish in wishes %}
+                <a href="{{ path('app_wish_detail', {'id' : wish.id}) }}" class="list-group-item list-group-item-action">{{ wish.title }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+

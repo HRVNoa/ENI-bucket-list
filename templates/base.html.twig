@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('images/logo/favicon.png') }}">
         {% block stylesheets %}
         {% endblock %}
 
@@ -12,6 +14,44 @@
         {% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <div class="container">
+            <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+                <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+                    <img src="{{ asset('images/logo/logo.svg') }}" alt="logo" width="40" height="32">
+                    <span class="fs-4">Bucket-List</span>
+                </a>
+                <ul class="nav nav-pills">
+                    <li class="nav-item m-1">
+                        <a href="{{ path('app_main_home') }}" class="nav-link active" aria-current="page">Home</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a href="{{ path('app_wish_list') }}" class="nav-link active" aria-current="page">All wishes</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a href="{{ path('app_wish_create') }}" class="nav-link active" aria-current="page">Add yours!</a>
+                    </li>
+                    <li class="nav-item m-1">
+                        <a href="{{ path('app_main_about') }}" class="nav-link active" aria-current="page">About us</a>
+                    </li>
+                </ul>
+            </header>
+        </div>
+
+        <div class="ui main container" style="margin-top: 1em;">
+            {% for message in app.flashes('success') %}
+                <div class="alert alert-success alert-dismissible" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+            {% block body %}{% endblock %}
+        </div>
+
+        <div class="container">
+            <footer class="py-3 my-4">
+                <ul class="nav justify-content-center border-bottom pb-3 mb-3"></ul>
+                <p class="text-center text-body-secondary">© 2025 Bucket-List</p>
+            </footer>
+        </div>
     </body>
 </html>

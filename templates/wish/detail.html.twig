@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    <div>
+        <h1>{{ wish.title }}</h1>
+        <p>Created by {{ wish.author }} on {{ wish.dateCreated|date("y-m-d") }}</p>
+        <p>{{ wish.description }}</p>
+        <a href="{{ path('app_wish_delete', {'id': wish.id}) }}" class="btn btn-danger">Delete</a>
+        <a href="{{ path('app_wish_update', {'id': wish.id}) }}" class="btn btn-dark">Modify</a>
+    </div>
+
+{% endblock %}
+
+{% block title %}
+
+{% endblock %}
+
