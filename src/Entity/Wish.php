@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\WishRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: WishRepository::class)]
 class Wish
@@ -35,6 +36,13 @@ class Wish
     #[ORM\ManyToOne(inversedBy: 'wishes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Category $category = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\Image(
+        mimeTypes: ['image/jpeg', 'image/png'],
+        mimeTypesMessage: 'Please upload allowed extension image (png or jpg)'
+    )]
+    private ?string $image = null;
 
     public function getId(): ?int
     {
@@ -123,6 +131,18 @@ class Wish
     public function setCategory(?Category $category): static
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

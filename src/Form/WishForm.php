@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Wish;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,7 +32,7 @@ class WishForm extends AbstractType
             ->add('author', TextType::class,[
                 'label' => 'Author',
                 'attr' => [
-                    'class' => 'form-control mb-1',
+                    'class' => 'form-control mb-2',
                 ]
             ])
             ->add('category', EntityType::class,[
@@ -39,9 +40,17 @@ class WishForm extends AbstractType
                 'class' => Category::class,
                 'choice_label' => 'name',
                 'attr' => [
-                    'class' => 'form-control mb-1',
+                    'class' => 'form-control mb-2',
                 ],
                 'required' => true,
+            ])
+            ->add('image', FileType::class, [
+                'label' => 'Image',
+                'attr' => [
+                    'class' => 'form-control mb-2',
+                ],
+                'required' => false,
+                'mapped' => false,
             ])
         ;
     }

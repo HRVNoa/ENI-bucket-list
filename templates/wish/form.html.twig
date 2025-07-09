@@ -18,6 +18,13 @@
         {{ form_row(form.author) }}
         {{ form_row(form.description) }}
         {{ form_row(form.category) }}
+        {{ form_row(form.image) }}
+
+        {% if app.request.attributes.get('id') is not null or form.image.vars.value != '' %}
+            <div class="w-25">
+                <img src="{{ asset(form.image.parent.vars.value.image) }}" alt="Image : {{ form.title.vars.value }}" class="card-img py-2">
+            </div>
+        {% endif %}
         <button type="submit" class="btn btn-primary btn-lg px-4">{{ app.request.attributes.get('id') is null ? 'Add' : 'Update' }}</button>
     {{ form_end(form) }}
 

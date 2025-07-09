@@ -7,6 +7,9 @@ use App\Form\WishForm;
 use App\Repository\WishRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -46,13 +49,19 @@ final class WishController extends AbstractController
     }
 
     #[Route('/create')]
-    public function create(Request $request): Response
+    public function create(Request $request, #[Autowire('%kernel.project_dir%/public/uploads/image')] string $directory): Response
     {
         $wish = new Wish();
         $form = $this->createForm(WishForm::class, $wish);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $pathImage = $form->get('image')->getData();
+            if ($pathImage instanceof UploadedFile) {
+                $pathImage->move($directory, $pathImage->getClientOriginalName());
+                $wish->setImage('uploads/image/'.$pathImage->getClientOriginalName());
+            }
 
             $dateNow = new \DateTime();
             $wish->setIsPublished(true);
@@ -72,13 +81,19 @@ final class WishController extends AbstractController
     }
 
     #[Route('/update/{id}')]
-    public function update(int $id, Request $request): Response
+    public function update(int $id, Request $request,  #[Autowire('%kernel.project_dir%/public/uploads/image')] string $directory): Response
     {
         $wish = $this->wishRepository->find($id);
         $form = $this->createForm(WishForm::class, $wish);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $pathImage = $form->get('image')->getData();
+            if ($pathImage instanceof UploadedFile) {
+                $pathImage->move($directory, $pathImage->getClientOriginalName());
+                $wish->setImage('uploads/image/'.$pathImage->getClientOriginalName());
+            }
             $wish->setIsPublished(true);
             $this->em->persist($wish);
             $this->em->flush();
