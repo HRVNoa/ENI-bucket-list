@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Wish;
 use App\Form\WishForm;
 use App\Repository\WishRepository;
+use App\Services\Censurator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
@@ -68,6 +69,7 @@ final class WishController extends AbstractController
             $wish->setDateCreated();
             $wish->setDateUpdated();
             $wish->setAuthor($this->getUser());
+            $wish->setDescription(Censurator::purify($wish->getDescription()));
 
             $this->em->persist($wish);
             $this->em->flush();
@@ -82,7 +84,7 @@ final class WishController extends AbstractController
     }
 
     #[Route('/update/{id}')]
-    public function update(int $id, Request $request,  #[Autowire('%kernel.project_dir%/public/uploads/image')] string $directory): Response
+    public function update(int $id, Request $request,  #[Autowire('%kernel.project_dir%/public/uploads/image')] string $directory, Censurator $censurator): Response
     {
         $wish = $this->wishRepository->find($id);
         $form = $this->createForm(WishForm::class, $wish);
@@ -104,11 +106,13 @@ final class WishController extends AbstractController
                 $wish->setPathImage('uploads/image/'.$nameFile);
             }
             $wish->setIsPublished(true);
+            $wish->setDescription($censurator->purify($wish->getDescription()));
+
             $this->em->persist($wish);
             $this->em->flush();
 
             $this->addFlash('success', 'Idea successfully updated!');
-            return $this->redirectToRoute('app_wish_list');
+            return $this->redirectToRoute('app_wish_detail', ['id' => $id]);
         }
 
         return $this->render('wish/form.html.twig', [
