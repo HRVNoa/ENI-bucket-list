@@ -4,8 +4,8 @@
 
     <div>
         <h1>{{ wish.title }}</h1>
-        {% if wish.image is not null %}
-            <img src="{{ asset(wish.image) }}" width="300" alt="Image : {{ wish.title }}">
+        {% if wish.pathImage is not null %}
+            <img src="{{ asset(wish.pathImage) }}" width="300" alt="Image : {{ wish.title }}">
         {% endif %}
         <p>Created by {{ wish.author }} on {{ wish.dateCreated|date("y-m-d") }}</p>
         <p>{{ wish.description }}</p>

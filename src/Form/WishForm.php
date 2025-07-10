@@ -6,6 +6,7 @@ use App\Entity\Category;
 use App\Entity\Wish;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -51,6 +52,14 @@ class WishForm extends AbstractType
                 ],
                 'required' => false,
                 'mapped' => false,
+            ])
+            ->add('doDelete', CheckboxType::class, [
+                'label' => 'Delete image',
+                'attr' => [
+                    'class' => 'form-check-input mb-2',
+                ],
+                'mapped' => false,
+                'required' => false,
             ])
         ;
     }

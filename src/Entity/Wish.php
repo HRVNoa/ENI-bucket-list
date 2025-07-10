@@ -39,10 +39,10 @@ class Wish
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\Image(
-        mimeTypes: ['image/jpeg', 'image/png'],
-        mimeTypesMessage: 'Please upload allowed extension image (png or jpg)'
+        mimeTypes: ['image/jpeg', 'image/jpg', 'image/png'],
+        mimeTypesMessage: 'Please upload allowed extension image (png or jpeg or jpg)'
     )]
-    private ?string $image = null;
+    private ?string $pathImage = null;
 
     public function getId(): ?int
     {
@@ -135,14 +135,14 @@ class Wish
         return $this;
     }
 
-    public function getImage(): ?string
+    public function getPathImage(): ?string
     {
-        return $this->image;
+        return $this->pathImage;
     }
 
-    public function setImage(?string $image): static
+    public function setPathImage(?string $pathImage): static
     {
-        $this->image = $image;
+        $this->pathImage = $pathImage;
 
         return $this;
     }

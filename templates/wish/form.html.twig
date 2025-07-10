@@ -20,9 +20,10 @@
         {{ form_row(form.category) }}
         {{ form_row(form.image) }}
 
-        {% if app.request.attributes.get('id') is not null or form.image.vars.value != '' %}
+        {% if form.vars.value.pathImage != '' %}
             <div class="w-25">
-                <img src="{{ asset(form.image.parent.vars.value.image) }}" alt="Image : {{ form.title.vars.value }}" class="card-img py-2">
+                <img src="{{ asset(form.vars.value.pathImage) }}" alt="Image : {{ form.title.vars.value }}" class="card-img py-2">
+                {{ form_row(form.doDelete) }}
             </div>
         {% endif %}
         <button type="submit" class="btn btn-primary btn-lg px-4">{{ app.request.attributes.get('id') is null ? 'Add' : 'Update' }}</button>

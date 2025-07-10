@@ -8,6 +8,7 @@ use App\Repository\WishRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
@@ -57,10 +58,10 @@ final class WishController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $pathImage = $form->get('image')->getData();
-            if ($pathImage instanceof UploadedFile) {
-                $pathImage->move($directory, $pathImage->getClientOriginalName());
-                $wish->setImage('uploads/image/'.$pathImage->getClientOriginalName());
+            $imageFile = $form->get('image')->getData();
+            if ($imageFile instanceof UploadedFile) {
+                $imageFile->move($directory, $imageFile->getClientOriginalName());
+                $wish->setPathImage('uploads/image/'.$imageFile->getClientOriginalName());
             }
 
             $dateNow = new \DateTime();
@@ -89,10 +90,18 @@ final class WishController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            $pathImage = $form->get('image')->getData();
-            if ($pathImage instanceof UploadedFile) {
-                $pathImage->move($directory, $pathImage->getClientOriginalName());
-                $wish->setImage('uploads/image/'.$pathImage->getClientOriginalName());
+            $imageFile = $form->get('image')->getData();
+
+            if ( ($form->get('doDelete')->getData() or $imageFile instanceof UploadedFile) and !is_null($wish->getPathImage())) {
+                $fileSystem = new Filesystem();
+                $fileSystem->remove($wish->getPathImage());
+                $wish->setPathImage(null);
+            }
+
+            if ($imageFile instanceof UploadedFile) {
+                $nameFile = $imageFile->getClientOriginalName();
+                $imageFile->move($directory, $nameFile);
+                $wish->setPathImage('uploads/image/'.$nameFile);
             }
             $wish->setIsPublished(true);
             $this->em->persist($wish);
@@ -110,6 +119,14 @@ final class WishController extends AbstractController
     public function delete(int $id): Response
     {
         $wish = $this->wishRepository->find($id);
+        if (!$wish){
+            throw $this->createNotFoundException('Wish not found');
+        }
+        if (!is_null($wish->getPathImage())) {
+            $fileSystem = new Filesystem();
+            $fileSystem->remove($wish->getPathImage());
+            $wish->setPathImage(null);
+        }
         $this->em->remove($wish);
         $this->em->flush();
         $this->addFlash('success', 'Idea successfully deleted!');
