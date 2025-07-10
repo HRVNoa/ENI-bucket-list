@@ -7,10 +7,15 @@
         {% if wish.pathImage is not null %}
             <img src="{{ asset(wish.pathImage) }}" width="300" alt="Image : {{ wish.title }}">
         {% endif %}
-        <p>Created by {{ wish.author }} on {{ wish.dateCreated|date("y-m-d") }}</p>
+        <p>Created by {{ wish.author.pseudo }} on {{ wish.dateCreated|date("y-m-d") }}</p>
         <p>{{ wish.description }}</p>
-        <a href="{{ path('app_wish_delete', {'id': wish.id}) }}" class="btn btn-danger">Delete</a>
-        <a href="{{ path('app_wish_update', {'id': wish.id}) }}" class="btn btn-dark">Modify</a>
+
+        {% if wish.author == app.user or is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_wish_delete', {'id': wish.id}) }}" class="btn btn-danger">Delete</a>
+        {% endif %}
+        {% if wish.author == app.user %}
+            <a href="{{ path('app_wish_update', {'id': wish.id}) }}" class="btn btn-dark">Modify</a>
+        {% endif %}
     </div>
 
 {% endblock %}

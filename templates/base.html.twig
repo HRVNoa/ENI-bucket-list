@@ -27,12 +27,27 @@
                     <li class="nav-item m-1">
                         <a href="{{ path('app_wish_list') }}" class="nav-link active" aria-current="page">All wishes</a>
                     </li>
+                    {% if app.user %}
                     <li class="nav-item m-1">
                         <a href="{{ path('app_wish_create') }}" class="nav-link active" aria-current="page">Add yours!</a>
                     </li>
+                    {% endif %}
                     <li class="nav-item m-1">
                         <a href="{{ path('app_main_about') }}" class="nav-link active" aria-current="page">About us</a>
                     </li>
+
+                    {% if app.user %}
+                        <li class="nav-item m-1">
+                            <a href="{{ path('app_security_logout') }}" class="nav-link" aria-current="page">Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item m-1">
+                            <a href="{{ path('app_security_login') }}" class="nav-link" aria-current="page">Login</a>
+                        </li>
+                        <li class="nav-item m-1">
+                            <a href="{{ path('app_registration_register') }}" class="nav-link" aria-current="page">Register</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </header>
         </div>

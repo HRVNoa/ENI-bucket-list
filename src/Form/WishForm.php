@@ -30,12 +30,6 @@ class WishForm extends AbstractType
                     'class' => 'form-control mb-2',
                 ]
             ])
-            ->add('author', TextType::class,[
-                'label' => 'Author',
-                'attr' => [
-                    'class' => 'form-control mb-2',
-                ]
-            ])
             ->add('category', EntityType::class,[
                 'label' => 'Category',
                 'class' => Category::class,

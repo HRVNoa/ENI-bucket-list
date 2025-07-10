@@ -64,10 +64,10 @@ final class WishController extends AbstractController
                 $wish->setPathImage('uploads/image/'.$imageFile->getClientOriginalName());
             }
 
-            $dateNow = new \DateTime();
             $wish->setIsPublished(true);
-            $wish->setDateCreated($dateNow);
-            $wish->setDateUpdated($dateNow);
+            $wish->setDateCreated();
+            $wish->setDateUpdated();
+            $wish->setAuthor($this->getUser());
 
             $this->em->persist($wish);
             $this->em->flush();
